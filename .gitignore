@@ -1,0 +1,41 @@
+# Rust and Anchor build artifacts
+/target/
+/.anchor/
+/test-ledger/
+/.surfpool/
+
+# JavaScript / TypeScript dependencies and build output
+/node_modules/
+/.yarn/
+/dist/
+/build/
+
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+.DS_Store
+
+# IDE metadata
+.idea/
+.vscode/
+*.iml
+
+# Solana wallets, keypairs, private keys, and seed material
+**/keypairs/
+**/*-keypair.json
+**/*_keypair.json
+**/keypair*.json
+**/wallet*.json
+**/id.json
+**/*.pem
+**/*.key
+**/*.seed
+**/*.mnemonic
+**/id.json
+/.config/solana/

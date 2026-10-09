@@ -1,0 +1,16 @@
+{
+  "name": "splitpay-onchain",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "gabrielmoreira9 <gmoreira.pra@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.32.1",
+    "@solana/web3.js": "^1.99.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "ts-node": "^10.9.2",
+    "typescript": "5.9.3"
+  }
+}
