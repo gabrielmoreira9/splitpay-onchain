@@ -5,7 +5,9 @@
 /.surfpool/
 
 # JavaScript / TypeScript dependencies and build output
-/node_modules/
+**/node_modules/
+**/.next/
+**/tsconfig.tsbuildinfo
 /.yarn/
 /dist/
 /build/
@@ -39,3 +41,6 @@
 **/*.mnemonic
 **/id.json
 /.config/solana/
+
+# Local agent/session metadata
+.codex/
