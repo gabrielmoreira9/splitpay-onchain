@@ -1,6 +1,15 @@
 
 import * as anchor from "@coral-xyz/anchor";
+import anchorPackage from "@coral-xyz/anchor";
 import { readFileSync } from "fs";
+
+const { BN } = anchorPackage;
+const MINT = new anchor.web3.PublicKey(
+    "8HGTnjBhZq3f6xPKjAqZZESNkVYguBLuCbZn1Rm9kCAt"
+);
+const FUNDED_PARTICIPANT = new anchor.web3.PublicKey(
+    "GNna9zGZbNqdLtUG4Qj3SUcmzkj4Bt6QG1xphHKb3MfF"
+);
 
 async function main() {
     const connection = new anchor.web3.Connection(
@@ -35,22 +44,22 @@ async function main() {
 
     const program = new anchor.Program(idl, provider);
 
-    const splitId = new anchor.BN(Date.now());
+    const splitId = new BN(Date.now());
 
     const participants = [
         {
-            wallet: anchor.web3.Keypair.generate().publicKey,
-            amount: new anchor.BN(10_000_000),
+            wallet: FUNDED_PARTICIPANT,
+            amount: new BN(10_000_000),
             paid: false,
         },
         {
             wallet: anchor.web3.Keypair.generate().publicKey,
-            amount: new anchor.BN(10_000_000),
+            amount: new BN(10_000_000),
             paid: false,
         },
         {
             wallet: anchor.web3.Keypair.generate().publicKey,
-            amount: new anchor.BN(10_000_000),
+            amount: new BN(10_000_000),
             paid: false,
         },
     ];
@@ -68,18 +77,49 @@ async function main() {
     const signature = await program.methods
         .createSplit(
             splitId,
-            new anchor.BN(30_000_000),
+            new BN(30_000_000),
             participants
         )
         .accounts({
             split: splitPda,
-            creator: creator.publicKey,
+            creator: wallet.publicKey,
+            recipient: wallet.publicKey,
+            mint: MINT,
             systemProgram: anchor.web3.SystemProgram.programId,
         })
         .rpc();
 
     console.log("Transação:", signature);
     console.log("PDA:", splitPda.toBase58());
+
+    const splitData = await (program.account as any)["splitAccount"].fetch(
+        splitPda
+    );
+
+    console.log("\n=== SPLITPAY ===");
+    console.log("Criador:", splitData.creator.toBase58());
+    console.log("Recebedor:", splitData.recipient.toBase58());
+    console.log("Valor total:", splitData.totalAmount.toString());
+    console.log("Participantes:", splitData.participants.length);
+
+    for (const participant of splitData.participants) {
+        console.log({
+            wallet: participant.wallet.toBase58(),
+            amount: participant.amount.toString(),
+            paid: participant.paid,
+        });
+    }
+
+    if (splitData.participants.length !== 3) {
+        throw new Error("Quantidade incorreta de participantes");
+    }
+
+    if (!splitData.totalAmount.eq(new BN(30_000_000))) {
+        throw new Error("Valor total incorreto");
+    }
+
+    console.log("Validação da PDA concluída com sucesso!");
+
 
     const account = await connection.getAccountInfo(splitPda);
 

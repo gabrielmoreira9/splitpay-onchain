@@ -9,8 +9,11 @@ skip-lint = false
 [programs.localnet]
 splitpay_onchain = "Akpk2C1ADPSGhECkh3Ejwh7Sk17qzDAA2wY7sqPz76AZ"
 
+[programs.devnet]
+splitpay_onchain = "Akpk2C1ADPSGhECkh3Ejwh7Sk17qzDAA2wY7sqPz76AZ"
+
 [provider]
-cluster = "localnet"
+cluster = "Devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

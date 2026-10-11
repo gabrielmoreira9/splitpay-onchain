@@ -20,6 +20,11 @@ pub struct CreateSplit<'info> {
 
     #[account(mut)]
     pub creator: Signer<'info>,
+    /// CHECK: This account is used only as the recipient public key.
+    /// No account data is read or modified.
+    pub recipient: UncheckedAccount<'info>,
+
+    pub mint: Account<'info, anchor_spl::token::Mint>,
 
     pub system_program: Program<'info, System>,
 }
@@ -59,8 +64,8 @@ pub fn handle_create_split(
     let split = &mut ctx.accounts.split;
 
     split.creator = ctx.accounts.creator.key();
-    split.recipient = ctx.accounts.creator.key();
-    split.mint = Pubkey::default();
+    split.recipient = ctx.accounts.recipient.key();
+    split.mint = ctx.accounts.mint.key();
     split.split_id = split_id;
     split.total_amount = total_amount;
     split.participants = participants;

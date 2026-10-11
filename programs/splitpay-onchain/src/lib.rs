@@ -28,5 +28,10 @@ pub mod splitpay_onchain {
             participants,
         )
     }
+
+    pub fn pay_share(ctx: Context<PayShare>) -> Result<()> {
+        instructions::pay_share::handle_pay_share(ctx)
+    }
 }
+
 
